@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 function fetcher(url) {
@@ -5,7 +6,12 @@ function fetcher(url) {
 }
 
 export default function Index() {
-  const { data, error } = useSWR('/api/randomQuote', fetcher);
+  const { query } = useRouter();
+  const { data, error } = useSWR(
+    `/api/randomQuote${query.author ? '?author=' + query.author : ''}`,
+    fetcher
+  );
+
   const author = data?.author;
   let quote = data?.quote;
 
